@@ -1,8 +1,8 @@
 import 'package:daily_manage_user_app/controller/connect_controller.dart';
 import 'package:daily_manage_user_app/helpers/tools_colors.dart';
-import 'package:daily_manage_user_app/screens/admin_main_screen.dart';
+import 'package:daily_manage_user_app/screens/admin_screens/admin_main_screen.dart';
 import 'package:daily_manage_user_app/screens/common_screens/widgets/splash_widget.dart';
-import 'package:daily_manage_user_app/screens/main_screen.dart';
+import 'package:daily_manage_user_app/screens/user_screens/user_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:lottie/lottie.dart';
@@ -102,7 +102,7 @@ class _SplashScreensState extends ConsumerState<SplashScreens> {
                 // return MainScreen(); // hoặc màn hình admin tương ứng
                 return AdminMainScreen(); // hoặc màn hình admin tương ứng
               } else {
-                return MainScreen(); // user bình thường
+                return UserMainScreen(); // user bình thường
               }
               // return user!= null ? MainScreen() :LoginScreen();
               // return user!= null ? SplashScreens() :LoginScreen();

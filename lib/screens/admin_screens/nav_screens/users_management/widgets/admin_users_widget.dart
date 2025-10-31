@@ -3,6 +3,7 @@ import 'package:daily_manage_user_app/providers/admin/admin_user_provider.dart';
 import 'package:daily_manage_user_app/screens/admin_screens/nav_screens/users_management/widgets/admin_user_item_widget.dart';
 import 'package:daily_manage_user_app/screens/admin_screens/nav_screens/users_management/widgets/screens/admin_information_user_screen.dart';
 import 'package:daily_manage_user_app/screens/common_screens/widgets/top_notification_widget.dart';
+import 'package:daily_manage_user_app/screens/user_screens/nav_screens/leave/dialogs/confirm_delete_dialog.dart';
 import 'package:daily_manage_user_app/widgets/dialog_confirm_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +15,6 @@ import '../../../../../models/user.dart';
 import '../../../../../widgets/circular_loading_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../auth_screens/nav_screens/leave/dialogs/confirm_delete_dialog.dart';
 
 enum Actions { detail, resigned, retained }
 

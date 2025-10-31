@@ -49,25 +49,49 @@ class AdminHeaderSubNavWidget extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   width: 45,
                   height: 45,
                   padding: const EdgeInsets.all(8),
                   child: Icon(
-                    icon,
+                    FontAwesomeIcons.bars,
                     color: HelpersColors.itemCard,
+                    size: 20,
                   ),
                 ),
               ),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    // width: 45,
+                    // height: 45,
+                    // padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      icon,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                  ),
+                  SizedBox(width: 20,),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
+
               InkWell(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {

@@ -15,8 +15,8 @@ import '../../../../../../../../controller/admin/admin_department_controller.dar
 import '../../../../../../../../models/department.dart';
 import '../../../../../../../../models/position.dart';
 import '../../../../../../../../widgets/loading_status_bar_widget.dart';
-import '../../../../../../../auth_screens/nav_screens/leave/dialogs/confirm_delete_dialog.dart';
 import '../../../../../../../common_screens/widgets/top_notification_widget.dart';
+import '../../../../../../../user_screens/nav_screens/leave/dialogs/confirm_delete_dialog.dart';
 
 enum Actions { edit, delete }
 

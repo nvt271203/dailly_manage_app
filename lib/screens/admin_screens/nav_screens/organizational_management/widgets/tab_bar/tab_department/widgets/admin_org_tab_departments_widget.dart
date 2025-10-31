@@ -2,9 +2,9 @@ import 'package:daily_manage_user_app/controller/admin/admin_department_controll
 import 'package:daily_manage_user_app/models/department.dart';
 import 'package:daily_manage_user_app/providers/admin/admin_department_provider.dart';
 import 'package:daily_manage_user_app/screens/admin_screens/nav_screens/organizational_management/widgets/tab_bar/widgets/admin_org_title_center_widget.dart';
-import 'package:daily_manage_user_app/screens/auth_screens/nav_screens/leave/dialogs/confirm_delete_dialog.dart';
 import 'package:daily_manage_user_app/screens/common_screens/widgets/loading_circle_white_default_widget.dart';
 import 'package:daily_manage_user_app/screens/common_screens/widgets/top_notification_widget.dart';
+import 'package:daily_manage_user_app/screens/user_screens/nav_screens/leave/dialogs/confirm_delete_dialog.dart';
 import 'package:daily_manage_user_app/widgets/loading_status_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

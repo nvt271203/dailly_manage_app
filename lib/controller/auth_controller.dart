@@ -3,10 +3,10 @@
 
   import 'package:cloudinary_public/cloudinary_public.dart';
   import 'package:daily_manage_user_app/providers/user_provider.dart';
-import 'package:daily_manage_user_app/screens/admin_main_screen.dart';
+import 'package:daily_manage_user_app/screens/admin_screens/admin_main_screen.dart';
   import 'package:daily_manage_user_app/screens/common_screens/widgets/splash_next_screen_widget.dart';
   import 'package:daily_manage_user_app/screens/common_screens/widgets/top_notification_widget.dart';
-  import 'package:daily_manage_user_app/screens/main_screen.dart';
+  import 'package:daily_manage_user_app/screens/user_screens/user_main_screen.dart';
   import 'package:daily_manage_user_app/services/manage_http_response.dart';
   import 'package:flutter/cupertino.dart';
   import 'package:flutter/material.dart';
@@ -119,7 +119,7 @@ import 'package:daily_manage_user_app/screens/admin_main_screen.dart';
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return SplashNextScreenWidget(screenWidget: MainScreen());
+                  return SplashNextScreenWidget(screenWidget: UserMainScreen());
                   // return MainScreen();
                 },
               ),

@@ -2,12 +2,13 @@ import 'package:daily_manage_user_app/helpers/format_helper.dart';
 import 'package:daily_manage_user_app/helpers/tools_colors.dart';
 import 'package:daily_manage_user_app/providers/user_provider.dart';
 import 'package:daily_manage_user_app/providers/work_provider.dart';
-import 'package:daily_manage_user_app/screens/auth_screens/nav_screens/home/screens/detail_work_screen.dart';
 import 'package:daily_manage_user_app/widgets/circular_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../user_screens/nav_screens/home/screens/detail_work_screen.dart';
 
 class TodoListTableWidget extends ConsumerStatefulWidget {
   const TodoListTableWidget({super.key});
@@ -275,7 +276,7 @@ class _TodoListTableWidgetState extends ConsumerState<TodoListTableWidget> {
                                 Container(
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
-                                      colors: [HelpersColors.primaryColor, HelpersColors.secondaryColor],
+                                      colors: [HelpersColors.primaryColor, HelpersColors.primaryColor],
                                     ),
                                     border: Border.all(color: Colors.white),
                                   ),
@@ -286,7 +287,7 @@ class _TodoListTableWidgetState extends ConsumerState<TodoListTableWidget> {
                                       Expanded(flex: 2, child: Center(child: Text("Date", style: _headerStyle))),
                                       Expanded(flex: 4, child: Center(child: Text("Working Time", style: _headerStyle))),
                                       Expanded(flex: 2, child: Center(child: Text("Hours", style: _headerStyle))),
-                                      Expanded(flex: 2, child: Center(child: Text("Details", style: _headerStyle))),
+                                      Expanded(flex: 1, child: Center(child: Text("View", style: _headerStyle))),
                                     ],
                                   ),
                                 ),
@@ -341,8 +342,9 @@ class _TodoListTableWidgetState extends ConsumerState<TodoListTableWidget> {
                                     ),
                                   ),
                                   Expanded(
-                                    flex: 2,
-                                    child: Center(
+                                    flex: 1,
+                                    child: Align(
+
                                       child: InkWell(
                                         onTap: () {
                                           Navigator.push(
@@ -355,14 +357,10 @@ class _TodoListTableWidgetState extends ConsumerState<TodoListTableWidget> {
                                             ),
                                           );
                                         },
-                                        child: Text(
-                                          "View",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: HelpersColors.itemPrimary,
-                                          ),
-                                        ),
+                                        child: Icon(Icons.arrow_circle_right,color: HelpersColors.primaryColor,),
+
                                       ),
+                                      alignment: Alignment.topRight,
                                     ),
                                   ),
                                 ],

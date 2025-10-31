@@ -7,7 +7,7 @@ import 'package:daily_manage_user_app/screens/common_screens/splash_screens.dart
 import 'package:daily_manage_user_app/screens/common_screens/widgets/splash_next_screen_widget.dart';
 import 'package:daily_manage_user_app/screens/common_screens/widgets/splash_widget.dart';
 import 'package:daily_manage_user_app/screens/admin_screens/nav_screens/users_management/widgets/screens/admin_create_new_user_screen.dart';
-import 'package:daily_manage_user_app/screens/main_screen.dart';
+import 'package:daily_manage_user_app/screens/user_screens/user_main_screen.dart';
 import 'package:daily_manage_user_app/screens/responsive.dart';
 import 'package:daily_manage_user_app/screens/temp.dart';
 import 'package:daily_manage_user_app/services/sockets/leave_socket.dart';
