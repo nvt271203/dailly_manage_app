@@ -22,8 +22,8 @@ class ChatbotOverlayWidget {
 
     _overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        right: 25,
-        bottom: 15,
+        left: 25,
+        bottom: 25,
         child: GestureDetector(
           onTap: () async{
 
@@ -70,11 +70,11 @@ class ChatbotOverlayWidget {
             height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
-              border: Border.all(width: 2,color: HelpersColors.itemCard)
+              color: HelpersColors.itemCard,
+              border: Border.all(width: 2,color: Colors.white)
             ),
             child: Lottie.asset(
-              'assets/lotties/chatbot.json',
+              'assets/lotties/botchat.json',
               repeat: true,
             ),
           ),

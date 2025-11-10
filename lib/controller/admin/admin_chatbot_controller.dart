@@ -1,10 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:daily_manage_user_app/models/message.dart';
+import 'package:daily_manage_user_app/screens/common_screens/widgets/top_notification_widget.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../global_variables.dart';
+import '../../models/document.dart';
 import '../../models/room.dart';
 
 class AdminChatbotController {
@@ -65,10 +71,7 @@ class AdminChatbotController {
       }
       final res = await _dio.get(
         '/api/messages/$roomId',
-        queryParameters:{
-          'page': page.toString(),
-          'limit': limit.toString(),
-        },
+        queryParameters: {'page': page.toString(), 'limit': limit.toString()},
         options: Options(
           headers: {
             'x-auth-token': token, // Gửi token trong header để xác thực
@@ -190,4 +193,203 @@ class AdminChatbotController {
     }
     return null;
   }
+
+  // SỬA LẠI HÀM NÀY
+  Future<void> pickAndUploadFiles() async {
+    // 1. CHỌN FILE
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+      allowMultiple: true,
+    );
+
+    if (result == null || result.files.isEmpty) {
+      // Người dùng hủy, chỉ cần return, không làm gì cả
+      return;
+    }
+
+    // 2. TẠO FORM-DATA
+    try {
+      List<MultipartFile> filesToUpload = [];
+      for (PlatformFile file in result.files) {
+        filesToUpload.add(
+          await MultipartFile.fromFile(file.path!, filename: file.name),
+        );
+      }
+
+      FormData formData = FormData.fromMap({"files": filesToUpload});
+
+      // 3. GỬI YÊU CẦU
+      Response response = await _dio.post(
+        '$uriChatbotUser/upload',
+        data: formData,
+        onSendProgress: (int sent, int total) {
+          print("Đang tải: ${((sent / total) * 100).toStringAsFixed(0)}%");
+        },
+      );
+
+      // 4. XỬ LÝ KẾT QUẢ
+      if (response.statusCode != 200) {
+        // Nếu server trả về lỗi (nhưng không phải 500)
+        throw Exception("Server báo lỗi: ${response.data}");
+      }
+
+      // Thành công, không cần làm gì, hàm sẽ tự kết thúc
+    } on DioException catch (e) {
+      // Ném lỗi Dio ra cho UI bắt
+      throw Exception("Lỗi kết nối: ${e.message}");
+    } catch (e) {
+      // Ném lỗi chung ra cho UI bắt
+      throw Exception("Đã xảy ra lỗi: $e");
+    }
+  }
+
+  // code logic upload pdf  chỉ 1 file
+  Future<String?> pickAndUploadPdfSingle() async {
+    // 1. Chọn file PDF
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (result != null && result.files.single.path != null) {
+      File file = File(result.files.single.path!);
+      String fileName = file.path.split('/').last;
+
+      // 2. Tạo FormData
+      // Đây là cách để gửi file và text (nếu cần)
+      FormData formData = FormData.fromMap({
+        'name': 'Hợp đồng lao động $fileName', // Gửi thêm 1 trường 'name'
+        'pdfFile': await MultipartFile.fromFile(file.path, filename: fileName),
+      });
+
+      try {
+        // 3. Gửi request POST bằng Dio
+        Response response = await _dio.post(
+          '/api/upload',
+          data: formData,
+          onSendProgress: (int sent, int total) {
+            // Theo dõi tiến độ upload
+            double progress = sent / total;
+            print('Tiến độ upload: ${(progress * 100).toStringAsFixed(2)}%');
+          },
+        );
+
+        // 4. Xử lý kết quả
+        if (response.statusCode == 201) {
+          print('Upload thành công!');
+          print('URL của file: ${response.data['document']['pdfUrl']}');
+          return response.data['document']['pdfUrl'];
+        } else {
+          print('Upload thất bại: ${response.data['message']}');
+          return null;
+        }
+      } on DioException catch (e) {
+        print('Lỗi Dio: $e');
+        return null;
+      }
+    } else {
+      // Người dùng không chọn file
+      print('Người dùng đã huỷ chọn file.');
+      return null;
+    }
+  }
+
+  Future<List<Document>?> pickAndUploadPdfMulti() async {
+    // 1. Chọn file PDF
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+      allowMultiple: true, // <-- Cho phép upload nhiều file PDF
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      // 2. Tạo FormData
+      FormData formData = FormData(); // Tạo FormData rỗng
+
+      // Lặp qua tất cả các file đã chọn
+      for (var file in result.files) {
+        if (file.path != null) {
+          String fileName = file.name; // Dùng file.name cho đơn giản
+
+          // Thêm từng file vào FormData với CÙNG MỘT KEY
+          formData.files.add(
+            MapEntry(
+              'pdfFiles', // <-- Đặt tên key (ví dụ: 'pdfFiles')
+              await MultipartFile.fromFile(file.path!, filename: fileName),
+            ),
+          );
+        }
+      }
+
+      try {
+        // 3. Gửi request POST bằng Dio
+        Response response = await _dio.post(
+          '/api/upload-multiple',
+          data: formData,
+          onSendProgress: (int sent, int total) {
+            // Theo dõi tiến độ upload
+            double progress = sent / total;
+            print('Tiến độ upload: ${(progress * 100).toStringAsFixed(2)}%');
+          },
+          // ---- THÊM VÀO ĐÂY ----
+          options: Options(
+            // Đặt thời gian chờ nhận phản hồi (vd: 2 phút)
+            receiveTimeout: Duration(minutes: 2),
+          ),
+          // ---------------------
+        );
+
+        // 4. Xử lý kết quả
+        if (response.statusCode == 201) {
+          print('Upload thành công!');
+
+          List<Document> documents = (response.data['documents'] as List)
+              .map((item) => Document.fromMap(item))
+              .toList();
+
+          print('Các URL của file: ${documents.length}');
+          return documents;
+        } else {
+          print('Upload thất bại: ${response.data['message']}');
+          return null;
+        }
+      } on DioException catch (e) {
+        print('Lỗi Dio: $e');
+        return null;
+      }
+    } else {
+      // Người dùng không chọn file
+      print('Người dùng đã huỷ chọn file.');
+      return null;
+    }
+  }
+
+  Future<List<Document>> fetchDocumentsPagination({
+    int page = 1,
+    int limit = 10,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/api/documents_pagination',
+        queryParameters: {'page': page.toString(), 'limit': limit.toString()},
+      );
+      final documentsData = response.data;
+      print('documents_pagination - ${documentsData}');
+      if (response.statusCode == 200) {
+        final List<dynamic> list = documentsData['documents'];
+        final documents = list.map((item) => Document.fromMap(item)).toList();
+        return documents;
+      } else {
+        throw Exception('Fail to load documents: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      // Ném lỗi Dio ra cho UI bắt
+      throw Exception("Lỗi kết nối: ${e.message}");
+    } catch (e) {
+      // Ném lỗi chung ra cho UI bắt
+      throw Exception("Đã xảy ra lỗi: $e");
+    }
+  }
+
 }
