@@ -6,20 +6,32 @@ class Document {
   final String pdfUrl;
   final bool isTrain;
   final String cloudinaryId;
+  String? totalChunksAdded;
   final DateTime uploadedAt;
 
-  Document({required this.id, required this.name, required this.pdfUrl, required this.cloudinaryId, required this.isTrain,required this.uploadedAt});
+  Document({
+    required this.id,
+    required this.name,
+    required this.pdfUrl,
+    required this.cloudinaryId,
+    required this.isTrain,
+    required this.uploadedAt,
+    this.totalChunksAdded,
+  });
 
   factory Document.fromMap(Map<String, dynamic> json) {
-    return Document(id: json["_id"],
+    return Document(
+      id: json["_id"],
       name: json["name"],
       pdfUrl: json["pdfUrl"],
-      isTrain: json["isTrain"],
+      isTrain: json["isTrain"] ?? false,
       cloudinaryId: json["cloudinaryId"],
-      uploadedAt: DateTime.parse(json["uploadedAt"]),);
-
+      totalChunksAdded: json["total_chunks_added"] ?? '',
+      uploadedAt: DateTime.parse(json["uploadedAt"]),
+    );
   }
-  factory Document.fromJson(String json){
+
+  factory Document.fromJson(String json) {
     return Document.fromMap(jsonDecode(json));
   }
 
@@ -33,9 +45,8 @@ class Document {
       "uploadedAt": this.uploadedAt.toIso8601String(),
     };
   }
-  String toJson(){
+
+  String toJson() {
     return jsonEncode(toMap());
   }
-
-
 }
